@@ -1,6 +1,6 @@
 def show_menu():
     print(
-    """Welcome to To-do List : 
+        """Welcome to To-do List : 
 -------------------------
     1. View tasks
     2. Add tasks
@@ -11,42 +11,49 @@ def show_menu():
 
 def add_item(items):
     user_item = input("Enter item to add: ")
-    items[user_item] = "Not Done"
+    items.append({"task": user_item, "status": "Not Done"})
 
 def remove_item(items):
     show_all_items(items)
+    if not items:
+        return
 
-    user_item = input("Enter item to remove: ")
-
-    if user_item in items:
-        items.pop(user_item)
-    else:
-        print("Item not found")
-
-    show_all_items(items)
+    try:
+        index = int(input("Enter index to remove: ")) - 1
+        if 0 <= index < len(items):
+            removed = items.pop(index)
+            print(f"Removed: {removed['task']}")
+        else:
+            print("Invalid index")
+    except ValueError:
+        print("Please enter a valid number")
 
 def mark_item(items):
     show_all_items(items)
+    if not items:
+        return
 
-    user_item = input("Enter item to mark done: ")
-
-    if user_item in items:
-        items[user_item] = "Done"
-    else:
-        print("Item not found")
-
-    show_all_items(items)
+    try:
+        index = int(input("Enter index to mark done: ")) - 1
+        if 0 <= index < len(items):
+            items[index]["status"] = "Done"
+            print(f"Marked as done: {items[index]['task']}")
+        else:
+            print("Invalid index")
+    except ValueError:
+        print("Please enter a valid number")
 
 def show_all_items(items):
     if not items:
         print("No items present")
     else:
-        print("Your current items are as follows:")
-        for item in items:
-            print(f"{item} : {items[item]}")
+        print("\nYour current items are as follows:")
+        for i, item in enumerate(items, start=1):
+            print(f"{i}. {item['task']} : {item['status']}")
+        print()
 
 def main():
-    items = {}
+    items = []
     show_menu()
 
     while True:
@@ -54,7 +61,7 @@ def main():
         if user_input == "1":
             show_all_items(items)
         elif user_input == "2":
-            add_item(items = items)
+            add_item(items)
         elif user_input == "3":
             mark_item(items)
         elif user_input == "4":
@@ -65,12 +72,5 @@ def main():
         else:
             print("Invalid input")
 
-
 if __name__ == "__main__":
     main()
-
-
-## Prettify the show items, add index
-# 1. sleep
-# 2. work
-## Rewrite or modify the functions (mark as done, remove) to work with the specific index
